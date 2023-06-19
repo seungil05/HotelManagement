@@ -1,0 +1,133 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: HotelManagement
+  description: A simple API to illustrate OpenAPI concepts
+paths:
+  /guests:
+    get:
+      description: Returns a list of Guests
+      responses:
+        '200':
+          description: Successfully returned a list of guests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Guest'
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Guest'
+      responses:
+        '200':
+          description: Successfully created a new Guest
+        '400':
+          description: Failed to create a new guest
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Guest'
+      responses:
+        '200':
+          description: Successfully updated a guest
+        '400':
+          description: Failed to update a guest
+  /deleteGuest/{id}:
+    delete:
+      description: Deletes a guest
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Guest ID
+      responses:
+        '200':
+          description: Successfully deleted a guest
+        '400':
+          description: Failed to delete a guest
+  /getById/{id}:
+    get:
+      description: Returns a guest by id
+      parameters:
+        - name: id
+          in: path
+          description: id of the guest
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully returned a guest by id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Guest'
+        '400':
+          description: Failed to return a guest by id
+  /rooms:
+    get:
+      description: Returns a list of rooms
+      responses:
+        '200':
+          description: Successfully returned a list of rooms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+components:
+  schemas:
+    Guest:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - emailAdress
+        - visitTime
+        - roomId
+      properties:
+        guestId:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        emailAddress:
+          type: string
+        visitTime:
+          type: integer
+        roomId:
+          type: integer
+    GuestId:
+      type: integer
+      required:
+        - guestId
+    Room:
+      type: object
+      required:
+        - roomNumber
+        - floor
+      properties:
+        roomId:
+          type: integer
+        roomNumber:
+          type: integer
+        floor:
+          type: integer
+
+
+
+  
