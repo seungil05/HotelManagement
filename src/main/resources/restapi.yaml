@@ -40,7 +40,7 @@ paths:
           description: Successfully updated a guest
         '400':
           description: Failed to update a guest
-  /deleteGuest/{id}:
+  /guests/{id}:
     delete:
       description: Deletes a guest
       parameters:
@@ -55,7 +55,6 @@ paths:
           description: Successfully deleted a guest
         '400':
           description: Failed to delete a guest
-  /getById/{id}:
     get:
       description: Returns a guest by id
       parameters:
@@ -71,7 +70,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
+                type: object
                 items:
                   $ref: '#/components/schemas/Guest'
         '400':
@@ -88,6 +87,136 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Room'
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+      responses:
+        '200':
+          description: Successfully created a new room
+        '400':
+          description: Failed to create a new room
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+      responses:
+        '200':
+          description: Successfully updated a room
+        '400':
+          description: Failed to update a room
+  /rooms/{id}:
+    get:
+      description: Returns a room by id
+      parameters:
+        - name: id
+          in: path
+          description: id of the room
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully returned a room by id
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Room'
+        '400':
+          description: Failed to return a room by id
+    delete:
+      description: Deletes a room
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Room ID
+      responses:
+        '200':
+          description: Successfully deleted a room
+        '400':
+          description: Failed to delete a room
+  /employee:
+    get:
+      description: Returns a list of Employees
+      responses:
+        '200':
+          description: Successfully returned a list of Employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Successfully created a new Employee
+        '400':
+          description: Failed to create a new Employee
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Successfully updated a Employee
+        '400':
+          description: Failed to update a Employee
+  /employee/{id}:
+    get:
+      description: Returns a Employee by id
+      parameters:
+        - name: id
+          in: path
+          description: id of the Employee
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully returned a Employee by id
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Employee'
+        '400':
+          description: Failed to return a Employee by id
+    delete:
+      description: Deletes a Employee
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Employee ID
+      responses:
+        '200':
+          description: Successfully deleted a Employee
+        '400':
+          description: Failed to delete a Employee
 components:
   schemas:
     Guest:
@@ -95,7 +224,7 @@ components:
       required:
         - firstName
         - lastName
-        - emailAdress
+        - emailAddress
         - visitTime
         - roomId
       properties:
@@ -111,10 +240,6 @@ components:
           type: integer
         roomId:
           type: integer
-    GuestId:
-      type: integer
-      required:
-        - guestId
     Room:
       type: object
       required:
@@ -127,6 +252,29 @@ components:
           type: integer
         floor:
           type: integer
+        capacity:
+          type: integer
+        price:
+          type: integer
+    Employee:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - job
+      properties:
+        employeeId:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        job:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
 
 
 
