@@ -22,4 +22,12 @@ public abstract class AbstractController {
         return ResponseEntity.ok().build();
     }
 
+    protected static <T> ResponseEntity<T> badRespond() {
+        return ResponseEntity.badRequest().build();
+    }
+
+    protected static <T> ResponseEntity<T> notFoundRespond() {
+        return ResponseEntity.notFound().build();
+    }
+
 }

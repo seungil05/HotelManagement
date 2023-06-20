@@ -217,6 +217,19 @@ paths:
           description: Successfully deleted a Employee
         '400':
           description: Failed to delete a Employee
+  /users:
+    post:
+      requestBody:
+          required: true
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successfully created a new User
+        '400':
+          description: Failed to create a new User
 components:
   schemas:
     Guest:
@@ -271,6 +284,12 @@ components:
           type: string
         job:
           type: string
+    User:
+      type: object
+      required:
+        - username
+        - password
+      properties:
         username:
           type: string
         password:

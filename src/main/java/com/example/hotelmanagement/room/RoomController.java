@@ -3,6 +3,8 @@ package com.example.hotelmanagement.room;
 import ch.ubs.m295.generated.v1.controller.RoomsApi;
 import ch.ubs.m295.generated.v1.dto.Room;
 import com.example.hotelmanagement.AbstractController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +13,8 @@ import java.util.Optional;
 
 @RestController
 public class RoomController extends AbstractController implements RoomsApi {
+
+    private final Logger logger = LoggerFactory.getLogger(RoomController.class);
 
     private final RoomDao roomDao;
 
@@ -22,8 +26,10 @@ public class RoomController extends AbstractController implements RoomsApi {
     public ResponseEntity<List<Room>> roomsGet() {
         Optional<List<Room>> rooms = roomDao.getRooms();
         if (rooms.isEmpty()){
-            return ResponseEntity.notFound().build();
+            logger.error("No rooms found");
+            return notFoundRespond();
         } else {
+            logger.info("All rooms selected");
             return getRespond(rooms.get());
         }
     }
@@ -32,8 +38,10 @@ public class RoomController extends AbstractController implements RoomsApi {
     public ResponseEntity<List<Room>> roomsIdGet(Integer roomId) {
         Optional<List<Room>> room = roomDao.getRoomById(roomId);
         if (room.isEmpty()){
-            return ResponseEntity.notFound().build();
+            logger.error("No rooms found");
+            return notFoundRespond();
         } else {
+            logger.info("Room with id {} selected", roomId);
             return getRespond(room.get());
         }
     }
@@ -41,27 +49,49 @@ public class RoomController extends AbstractController implements RoomsApi {
     @Override
     public ResponseEntity<Void> roomsPut(Room room) {
         if (room.getRoomId() == null) {
-            return ResponseEntity.badRequest().build();
+            return badRespond();
         }
-        roomDao.updateRoom(room);
-        return ResponseEntity.ok().build();
+        try {
+            logger.info("Room with id {} updated", room.getRoomId());
+            roomDao.updateRoom(room);
+            return putRespond();
+        }
+        catch (Exception e) {
+            logger.error("Room with id {} not found", room.getRoomId());
+            return notFoundRespond();
+        }
     }
 
     @Override
     public ResponseEntity<Void> roomsPost(Room room) {
         if (room == null) {
-            return ResponseEntity.badRequest().build();
+            return badRespond();
         }
-        roomDao.createRoom(room);
-        return ResponseEntity.ok().build();
+
+        try {
+            logger.info("Room created");
+            roomDao.insertRoom(room);
+            return postRespond();
+        }
+        catch (Exception e) {
+            logger.error("Room could not be created");
+            return notFoundRespond();
+        }
     }
 
     @Override
     public ResponseEntity<Void> roomsIdDelete(Integer roomId) {
         if (roomId == null) {
-            return ResponseEntity.badRequest().build();
+            return badRespond();
         }
-        roomDao.deleteRoom(roomId);
-        return ResponseEntity.ok().build();
+        try {
+            logger.info("Room with id {} deleted", roomId);
+            roomDao.deleteRoom(roomId);
+            return deleteRespond();
+        }
+        catch (Exception e) {
+            logger.error("Room with id {} not found", roomId);
+            return notFoundRespond();
+        }
     }
 }

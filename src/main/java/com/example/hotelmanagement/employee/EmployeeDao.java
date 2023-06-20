@@ -1,14 +1,12 @@
 package com.example.hotelmanagement.employee;
 
 import ch.ubs.m295.generated.v1.dto.Employee;
-import ch.ubs.m295.generated.v1.dto.Room;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +17,13 @@ public class EmployeeDao {
 
     private final static String SELECT_ALL_QUERY = "SELECT * FROM Employees";
 
-    private final static String UPDATE_EMPLOYEE_QUERY = "UPDATE Employees SET firstName = :firstName, lastName = :lastName, job = :job, username = :username, password = :pasword WHERE employeeId = :employeeId";
+    private final static String UPDATE_EMPLOYEE_QUERY = "UPDATE Employees SET firstName = :firstName, lastName = :lastName, job = :job WHERE employeeId = :employeeId";
 
     private final static String SELECT_BY_ID_QUERY = "SELECT * FROM Employees WHERE employeeId = :employeeId";
 
     private final static String DELETE_EMPLOYEE_QUERY = "DELETE FROM Employees WHERE employeeId = :employeeId";
 
-    private final static String CREATE_EMPLOYEE_QUERY = "INSERT INTO Employees (firstName, lastName, job, username, password) VALUES (:firstName, :lastName, :job, :username, :password)";
+    private final static String CREATE_EMPLOYEE_QUERY = "INSERT INTO Employees (firstName, lastName, job) VALUES (:firstName, :lastName, :job)";
     public EmployeeDao(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
@@ -40,13 +38,11 @@ public class EmployeeDao {
                     String firstName = rs.getString("firstName");
                     String lastName = rs.getString("lastName");
                     String job = rs.getString("job");
-                    String username = rs.getString("username");
                     return new Employee()
                             .employeeId(id)
                             .firstName(firstName)
                             .lastName(lastName)
-                            .job(job)
-                            .username(username);
+                            .job(job);
                 }
         );
         if (result.isEmpty()){
@@ -67,8 +63,6 @@ public class EmployeeDao {
                         .firstName(rs.getString("firstName"))
                         .lastName(rs.getString("lastName"))
                         .job(rs.getString("job"))
-                        .username(rs.getString("username"))
-                        .password(rs.getString("password"))
         );
         if (result.size() > 1) {
             throw new RuntimeException("More than one room with id " + employeeId);
@@ -85,9 +79,7 @@ public class EmployeeDao {
                 .addValue("employeeId", employee.getEmployeeId())
                 .addValue("firstName", employee.getFirstName())
                 .addValue("lastName", employee.getLastName())
-                .addValue("job", employee.getJob())
-                .addValue("username", employee.getUsername())
-                .addValue("password", employee.getPassword());
+                .addValue("job", employee.getJob());
         namedParameterJdbcTemplate.update(
                 UPDATE_EMPLOYEE_QUERY,
                 namedParameters
@@ -101,9 +93,7 @@ public class EmployeeDao {
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("firstName", employee.getFirstName())
                 .addValue("lastName", employee.getLastName())
-                .addValue("job", employee.getJob())
-                .addValue("username", employee.getUsername())
-                .addValue("password", employee.getPassword());
+                .addValue("job", employee.getJob());
 
         namedParameterJdbcTemplate.update(
                 CREATE_EMPLOYEE_QUERY,

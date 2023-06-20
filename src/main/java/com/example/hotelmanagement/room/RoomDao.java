@@ -90,7 +90,7 @@ public class RoomDao {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<Void> createRoom(Room room){
+    public ResponseEntity<Void> insertRoom(Room room){
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         SqlParameterSource namedParameters = new MapSqlParameterSource()
