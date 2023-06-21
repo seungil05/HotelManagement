@@ -1,7 +1,6 @@
 package com.example.hotelmanagement.guest;
 
 import ch.ubs.m295.generated.v1.dto.Guest;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
