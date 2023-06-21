@@ -34,7 +34,6 @@ public class SecurityConfig {
                     .build();
             users.createUser(admin);
         }
-
         return users;
     }
     @Bean
@@ -42,6 +41,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/employee/**")
+                        .hasRole("USER")
+                        .requestMatchers("/guests")
                         .hasRole("USER")
                         .requestMatchers("/users/**")
                         .hasRole("ADMIN")
