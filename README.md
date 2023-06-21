@@ -28,6 +28,7 @@ To run this project, you need to have a MySQL Database running on your machine.
 You can find the SQL-Script in the GitHub Repository with the name [Database.sql](Database.sql).
 Copy the script and run it in your MySQL Workbench.
 
+![img.png](img.png)
 ## Usage
 All the endpoints which are available are listed in the [restapi.yaml](src/main/resources/restapi.yaml) file.
 #### Authentication
