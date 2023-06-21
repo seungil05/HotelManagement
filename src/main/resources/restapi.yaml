@@ -230,6 +230,34 @@ paths:
           description: Successfully created a new User
         '400':
           description: Failed to create a new User
+    put:
+      description: Change password
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successfully updated a password
+        '400':
+          description: Failed to update a password
+  /users/{username}:
+    delete:
+      description: Deletes a User
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: User username
+      responses:
+        '200':
+          description: Successfully deleted a User
+        '400':
+          description: Failed to delete a User
 components:
   schemas:
     Guest:
@@ -293,6 +321,8 @@ components:
         username:
           type: string
         password:
+          type: string
+        newPassword:
           type: string
 
 
