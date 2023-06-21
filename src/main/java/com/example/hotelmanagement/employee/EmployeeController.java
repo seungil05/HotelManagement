@@ -71,7 +71,7 @@ public class EmployeeController extends AbstractController implements EmployeeAp
         }
         try {
             logger.info("Employee created");
-            employeeDao.createEmployee(employee);
+            employeeDao.insertEmployee(employee);
             return postRespond();
         }
         catch (Exception e) {

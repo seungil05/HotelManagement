@@ -1,6 +1,6 @@
-package com.example.hotelmanagement.room;
+package com.example.hotelmanagement.guest;
 
-import ch.ubs.m295.generated.v1.dto.Room;
+import ch.ubs.m295.generated.v1.dto.Guest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,129 +24,130 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class RoomDaoTest {
+class GuestDaoTest {
+
     @Mock
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Mock
-    private RoomDao roomDao;
+    private GuestDao guestDao;
 
-    Room room = new Room()
-            .roomId(1)
-            .roomNumber(101)
-            .floor(1)
-            .capacity(2)
-            .price(100);
+    Guest guest = new Guest()
+            .guestId(1)
+            .firstName("John")
+            .lastName("Doe")
+            .emailAddress("john.doe@example.com")
+            .visitTime(4)
+            .roomId(2);
 
     @BeforeEach
     void setUp() {
-        this.roomDao = new RoomDao(this.namedParameterJdbcTemplate);
+        this.guestDao = new GuestDao(this.namedParameterJdbcTemplate);
     }
-
     @Test
-    void insertRoom(){
+    void insertGuest(){
         //Arrange
         ArgumentCaptor<MapSqlParameterSource> argumentCaptor =
                 ArgumentCaptor.forClass(MapSqlParameterSource.class);
 
         //Act
-        roomDao.insertRoom(room);
+        guestDao.insertGuest(guest);
 
         //Assert
         verify(this.namedParameterJdbcTemplate).update(
                 eq("""
-                INSERT INTO Rooms (roomNumber, floor, capacity, price) VALUES (:roomNumber, :floor, :capacity, :price)"""),
+                INSERT INTO Guests (firstName, lastName, emailAddress, roomId, visitTime) VALUES (:firstName, :lastName, :emailAddress, :roomId, :visitTime)"""),
                 argumentCaptor.capture(),
                 any(GeneratedKeyHolder.class)
         );
         MapSqlParameterSource mapSqlParameterSource = argumentCaptor.getValue();
-        assertThat(mapSqlParameterSource.getValue("floor")).isEqualTo(1);
-        assertThat(mapSqlParameterSource.getValue("roomNumber")).isEqualTo(101);
+        assertThat(mapSqlParameterSource.getValue("firstName")).isEqualTo("John");
+        assertThat(mapSqlParameterSource.getValue("lastName")).isEqualTo("Doe");
     }
 
     @Test
-    void getRoom(){
+    void getGuest(){
         // Arrange
         ArgumentCaptor<MapSqlParameterSource> argumentCaptor =
                 ArgumentCaptor.forClass(MapSqlParameterSource.class);
 
-        Room room2 = new Room();
-        room2.setRoomId(2);
-        room2.setRoomNumber(102);
-        room2.setFloor(1);
-        room2.setCapacity(2);
-        room2.setPrice(100);
+        Guest guest2 = new Guest();
+        guest2.setGuestId(2);
+        guest2.setFirstName("Max");
+        guest2.setLastName("Mustermann");
+        guest2.setRoomId(1);
+        guest2.setEmailAddress("max.mustermann@example.com");
+        guest2.setVisitTime(5);
 
-        List<Room> expectedRooms = Arrays.asList(room, room2);
+        List<Guest> expectedGuests = Arrays.asList(guest, guest2);
 
         when(namedParameterJdbcTemplate.query(
-                eq("SELECT * FROM Rooms"),
+                eq("SELECT * FROM Guests"),
                 argumentCaptor.capture(),
                 any(RowMapper.class)
-        )).thenReturn(expectedRooms);
+        )).thenReturn(expectedGuests);
 
         // Act
-        Optional<List<Room>> rooms = roomDao.getRooms();
+        Optional<List<Guest>> guests = guestDao.getAllGuests();
 
         // Assert
-        assertEquals(expectedRooms, rooms.get());
+        assertEquals(expectedGuests, guests.get());
     }
 
     @Test
-    void getRoomById() {
+    void getGuestById() {
         // Arrange
         ArgumentCaptor<MapSqlParameterSource> argumentCaptor =
                 ArgumentCaptor.forClass(MapSqlParameterSource.class);
 
         when(namedParameterJdbcTemplate.query(
-                eq("SELECT * FROM Rooms WHERE roomId = :roomId"),
+                eq("SELECT * FROM Guests WHERE guestId = :guestId"),
                 argumentCaptor.capture(),
                 any(RowMapper.class)
-        )).thenReturn(Arrays.asList(room));
+        )).thenReturn(Arrays.asList(guest));
 
         // Act
-        Optional<List<Room>> roomById = roomDao.getRoomById(1);
+        Optional<List<Guest>> guestById = guestDao.getGuestById(1);
 
         // Assert
-        assertEquals(room, roomById.get().get(0));
+        assertEquals(guest, guestById.get().get(0));
     }
 
     @Test
-    void updateRoom() {
+    void updateGuest() {
         // Arrange
         ArgumentCaptor<MapSqlParameterSource> argumentCaptor =
                 ArgumentCaptor.forClass(MapSqlParameterSource.class);
 
         when(namedParameterJdbcTemplate.update(
-                eq("UPDATE Rooms SET roomNumber = :roomNumber, floor = :floor, capacity = :capacity, price = :price WHERE roomId = :roomId"),
+                eq("UPDATE Guests SET firstName = :firstName, lastName = :lastName, emailAddress = :emailAddress, roomId = :roomId, visitTime = :visitTime WHERE guestId = :guestId"),
                 argumentCaptor.capture()
         )).thenReturn(1);
 
         // Act
-        roomDao.updateRoom(room);
+        guestDao.updateGuest(guest);
 
         // Assert
         MapSqlParameterSource mapSqlParameterSource = argumentCaptor.getValue();
-        assertThat(mapSqlParameterSource.getValue("roomNumber")).isEqualTo(101);
+        assertThat(mapSqlParameterSource.getValue("firstName")).isEqualTo("John");
     }
 
     @Test
-    void deleteRoom(){
+    void deleteGuest(){
         // Arrange
         ArgumentCaptor<MapSqlParameterSource> argumentCaptor =
                 ArgumentCaptor.forClass(MapSqlParameterSource.class);
 
         when(namedParameterJdbcTemplate.update(
-                eq("DELETE FROM Rooms WHERE roomId = :roomId"),
+                eq("DELETE FROM Guests WHERE guestId = :guestId"),
                 argumentCaptor.capture()
         )).thenReturn(1);
 
         // Act
-        roomDao.deleteRoom(1);
+        guestDao.deleteGuest(1);
 
         // Assert
         MapSqlParameterSource mapSqlParameterSource = argumentCaptor.getValue();
-        assertThat(mapSqlParameterSource.getValue("roomId")).isEqualTo(1);
+        assertThat(mapSqlParameterSource.getValue("guestId")).isEqualTo(1);
     }
-
 }

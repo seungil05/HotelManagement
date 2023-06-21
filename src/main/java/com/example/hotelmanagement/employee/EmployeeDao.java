@@ -87,7 +87,7 @@ public class EmployeeDao {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<Void> createEmployee(Employee employee){
+    public ResponseEntity<Void> insertEmployee(Employee employee){
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         SqlParameterSource namedParameters = new MapSqlParameterSource()
