@@ -21,6 +21,10 @@ public class EmployeeDao {
 
     private final static String SELECT_BY_ID_QUERY = "SELECT * FROM Employees WHERE employeeId = :employeeId";
 
+    private final static String SELECT_BY_FIRSTNAME_QUERY = "SELECT * FROM Employees WHERE firstName = :firstName";
+
+    private final static String SELECT_BY_LASTNAME_QUERY = "SELECT * FROM Employees WHERE firstName = :lastName";
+
     private final static String DELETE_EMPLOYEE_QUERY = "DELETE FROM Employees WHERE employeeId = :employeeId";
 
     private final static String CREATE_EMPLOYEE_QUERY = "INSERT INTO Employees (firstName, lastName, job) VALUES (:firstName, :lastName, :job)";
