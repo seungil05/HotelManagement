@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+            crossorigin="anonymous"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <title>Hotel Management</title>
+</head>
+
+<body>
+<div class="jumbotron">
+    <div>
+        <h1>Hotel Management</h1>
+    </div>
+</div>
+<div class="container">
+    <div class="row g-3">
+        <div class="col-sm-6 space">
+            <div class="row g-1">
+                <div class="card text-white bg-dark">
+                    <h5 class="card-header">Search By ID</h5>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="guest-id" class="form-label"
+                                >Enter Guest Id:</label
+                                >
+                                <input
+                                        type="number"
+                                        class="form-control"
+                                        id="guest-id"
+                                        required
+                                        onchange="validNumber('guest-id', 'feedbackGuestId')"
+                                />
+                                <div id="feedbackGuestId"></div>
+                            </div>
+                            <button
+                                    class="btn btn-primary"
+                                    onclick="getById()"
+                                    type="button"
+                            >
+                                Search
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-1">
+                <div class="card text-white bg-dark">
+                    <h5 class="card-header">Available Rooms</h5>
+                    <div class="card-body">
+                        <p id="no-rooms-found"></p>
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar-room">
+                            <table
+                                    class="table table-bordered table-dark table-striped table-rooms mb-0"
+                            >
+                                <thead>
+                                <tr>
+                                    <th scope="col">Room ID</th>
+                                    <th scope="col">Floor</th>
+                                    <th scope="col">Room Number</th>
+                                    <th scope="col">Capacity</th>
+                                    <th scope="col">Price</th>
+                                </tr>
+                                </thead>
+                                <tbody id="table-body-room"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3 space">
+            <div class="card text-white bg-dark">
+                <h5 class="card-header">Update</h5>
+                <div class="card-body">
+                    <p id="couldnt-insert"></p>
+                    <form>
+                        <div class="form-group">
+                            <label for="guestId" class="form-label">Guest ID</label>
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    id="guestId"
+                                    readonly
+                            />
+                            <div id="feedbackRoomIdUpdate"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastname" class="form-label">Last Name</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="lastname"
+                                    required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="firstname" class="form-label">First Name</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="firstname"
+                                    required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="emailaddress" class="form-label">Email</label>
+                            <input
+                                    type="email"
+                                    class="form-control"
+                                    id="emailaddress"
+                                    required
+                                    onchange="checkEmail('emailaddress', 'feedbackEmailUpdate')"
+                            />
+                            <div id="feedbackEmailUpdate"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="visittime" class="form-label">Visit Time</label>
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    id="visittime"
+                                    required
+                                    onchange="validNumber('visittime', 'feedbackVisitTimeUpdate')"
+                            />
+                            <div id="feedbackVisitTimeUpdate"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="roomId" class="form-label">Room ID</label>
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    id="roomId"
+                                    required
+                                    onchange="checkForValidRoomId('roomId', 'feedbackRoomUpdate')"
+                            />
+                            <div id="feedbackRoomUpdate"></div>
+                        </div>
+                        <button
+                                class="btn btn-primary"
+                                onclick="updateGuest()"
+                                type="submit"
+                        >
+                            Update
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3 space">
+            <div class="card text-white bg-dark">
+                <h5 class="card-header">New Guest</h5>
+                <div class="card-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="last-name" class="form-label">Last Name</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="last-name"
+                                    required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="first-name" class="form-label">First Name</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="first-name"
+                                    required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="email-address" class="form-label">Email</label>
+                            <input
+                                    type="email"
+                                    class="form-control"
+                                    id="email-address"
+                                    required
+                                    onchange="checkEmail('email-address', 'feedbackEmailInsert')"
+                            />
+                            <div id="feedbackEmailInsert"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="visit-time" class="form-label">Visit Time</label>
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    id="visit-time"
+                                    required
+                                    onchange="validNumber('visit-time', 'feedbackVisitTimeInsert')"
+                            />
+                            <div id="feedbackVisitTimeInsert"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="room-Id" class="form-label">Room ID</label>
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    id="room-Id"
+                                    required
+                                    onchange="checkForValidRoomId('room-Id', 'feedbackRoomIdInsert')"
+                            />
+                            <div id="feedbackRoomIdInsert"></div>
+                        </div>
+                        <button
+                                class="btn btn-primary"
+                                onclick="createGuest()"
+                                type="submit"
+                        >
+                            Insert
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row g-8">
+        <div class="col-md-12">
+            <p id="no-guest-found"></p>
+            <div class="table-wrapper-scroll-y my-custom-scrollbar-guest">
+                <table class="table table-dark table-striped table-guests">
+                    <thead>
+                    <tr>
+                        <th scope="col">Guest ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Email Address</th>
+                        <th scope="col">Visit Time</th>
+                        <th scope="col">Room ID</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="script.js"></script>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"
+></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"
+></script>
+</body>
+</html>
